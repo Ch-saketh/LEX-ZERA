@@ -1,16 +1,20 @@
 // src/components/ProductCard.jsx
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ShoppingBag, Eye } from "lucide-react";
+import { useCart } from "../context/CartContext.jsx";
 
 /**
  * ProductCard
  * Props:
  *  - product    : object { id, name, brand, price, originalPrice, image, badge, sizes }
- *  - onAddToBag : (product) => void
- *  - onViewProduct : (product) => void (optional, for detail page navigation)
  */
-export default function ProductCard({ product, onAddToBag, onViewProduct }) {
+export default function ProductCard({ product, onViewProduct }) {
   const [added, setAdded] = useState(false);
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const specs = product.specs ?? [];
+  const defaultSize = product.size ?? product.sizes?.[1] ?? product.sizes?.[0] ?? "OS";
 
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -20,12 +24,17 @@ export default function ProductCard({ product, onAddToBag, onViewProduct }) {
     e.preventDefault();
     e.stopPropagation();
     setAdded(true);
-    onAddToBag?.(product);
+    addToCart({ ...product, size: defaultSize });
     setTimeout(() => setAdded(false), 1800);
   };
 
   const handleView = () => {
-    onViewProduct?.(product);
+    if (onViewProduct) {
+      onViewProduct(product);
+      return;
+    }
+
+    navigate(`/product/${product.id}`);
   };
 
   return (
@@ -66,26 +75,45 @@ export default function ProductCard({ product, onAddToBag, onViewProduct }) {
           </span>
         )}
 
-        {/* ── Hover action buttons (slide up from bottom) ── */}
-        <div className="absolute bottom-0 inset-x-0 flex translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-10">
-          <button
-            onClick={handleAdd}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 font-black uppercase text-xs tracking-widest transition-colors duration-200 ${
-              added
-                ? "bg-[#0b2240] text-white"
-                : "bg-[#ff5700] hover:bg-[#e04e00] text-white"
-            }`}
-          >
-            <ShoppingBag size={14} strokeWidth={2.5} />
-            {added ? "Added!" : "Add to Bag"}
-          </button>
-          <button
-            onClick={handleView}
-            className="w-12 flex items-center justify-center bg-white border-l border-slate-200 text-[#0b2240] hover:bg-slate-50 transition-colors"
-          >
-            <Eye size={15} strokeWidth={2} />
-          </button>
-        </div>
+        {specs.length > 0 && (
+          <div className="absolute inset-0 z-10 flex flex-col justify-end bg-[#0b2240]/88 p-4 opacity-0 transition-all duration-300 ease-in-out group-hover:opacity-100">
+            <div className="mb-3 space-y-1.5 translate-y-2 transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+              {specs.map(([label, value]) => (
+                <p key={`${label}-${value}`} className="text-[10px] font-black uppercase tracking-[0.18em] text-white">
+                  <span className="text-[#3b82f6]">{label.toUpperCase()}</span> // {value.toUpperCase()}
+                </p>
+              ))}
+            </div>
+            <button
+              onClick={handleAdd}
+              className="bg-[#ff5700] px-4 py-3 text-center text-[10px] font-black uppercase tracking-[0.24em] text-white transition-all duration-300 ease-in-out hover:bg-white hover:text-[#0b2240]"
+            >
+              {added ? "COPPED" : "COP NOW"}
+            </button>
+          </div>
+        )}
+
+        {specs.length === 0 && (
+          <div className="absolute bottom-0 inset-x-0 flex translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-10">
+            <button
+              onClick={handleAdd}
+              className={`flex-1 flex items-center justify-center gap-2 py-3 font-black uppercase text-xs tracking-widest transition-colors duration-200 ${
+                added
+                  ? "bg-[#0b2240] text-white"
+                  : "bg-[#ff5700] hover:bg-[#e04e00] text-white"
+              }`}
+            >
+              <ShoppingBag size={14} strokeWidth={2.5} />
+              {added ? "Added!" : "Add to Bag"}
+            </button>
+            <button
+              onClick={handleView}
+              className="w-12 flex items-center justify-center bg-white border-l border-slate-200 text-[#0b2240] hover:bg-slate-50 transition-colors"
+            >
+              <Eye size={15} strokeWidth={2} />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Product info ── */}

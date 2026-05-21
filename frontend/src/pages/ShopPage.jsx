@@ -1,30 +1,20 @@
 // src/pages/ShopPage.jsx
 import { useState, useMemo } from "react";
 import { SlidersHorizontal, ChevronDown, X, ArrowUpDown } from "lucide-react";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/ProductCard.jsx";
+import { PRODUCTS } from "../data/products.js";
 
-// ─── Mock catalogue ──────────────────────────────────────────────────────────
-const PRODUCTS = [
-  { id: 1,  name: "Oversized Cargo Blazer", brand: "Nocturne", price: 89,  originalPrice: 139, image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80", badge: "New Drop", sizes: ["XS","S","M","L"] },
-  { id: 2,  name: "Asymmetric Linen Trench", brand: "Voidwear", price: 124, originalPrice: null, image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80", badge: null, sizes: ["S","M","L","XL"] },
-  { id: 3,  name: "Structured Boxy Tee", brand: "Nocturne", price: 38,  originalPrice: 55,  image: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=600&q=80", badge: "Sale", sizes: ["XS","S","M","L","XL"] },
-  { id: 4,  name: "Wide-Leg Utility Pant", brand: "Axle Studio", price: 97,  originalPrice: null, image: "https://images.unsplash.com/photo-1594938298603-c8148c4b3785?w=600&q=80", badge: null, sizes: ["S","M","L"] },
-  { id: 5,  name: "Draped Halter Vest", brand: "Voidwear", price: 55,  originalPrice: 80,  image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=80", badge: "Sale", sizes: ["XS","S","M"] },
-  { id: 6,  name: "Contrast Stitch Hoodie", brand: "Axle Studio", price: 74,  originalPrice: null, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80", badge: "New Drop", sizes: ["S","M","L","XL"] },
-  { id: 7,  name: "Seam-Detail Midi Skirt", brand: "Nocturne", price: 62,  originalPrice: null, image: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=600&q=80", badge: null, sizes: ["XS","S","M","L"] },
-  { id: 8,  name: "Relaxed Denim Jacket", brand: "Axle Studio", price: 108, originalPrice: 150, image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=600&q=80", badge: "Sale", sizes: ["S","M","L","XL"] },
-];
-
-const CATEGORIES = ["All", "Tops", "Bottoms", "Outerwear", "Accessories"];
-const SIZES      = ["XS", "S", "M", "L", "XL"];
+const CATEGORIES   = ["All", "Tops", "Bottoms", "Outerwear"];
+const DEPARTMENTS  = ["All", "Men", "Women", "Unisex"];
+const SIZES        = ["XS", "S", "M", "L", "XL", "XXL"];
 const SORT_OPTIONS = [
-  { label: "Featured",    value: "featured" },
-  { label: "Price: Low → High", value: "price_asc" },
+  { label: "Featured",         value: "featured"   },
+  { label: "Price: Low → High", value: "price_asc"  },
   { label: "Price: High → Low", value: "price_desc" },
-  { label: "Newest",      value: "newest" },
+  { label: "Newest",           value: "newest"     },
 ];
 
-// ─── Filter accordion ─────────────────────────────────────────────────────────
+// ── Filter accordion section ──────────────────────────────────────────────────
 function FilterSection({ title, children }) {
   const [open, setOpen] = useState(true);
   return (
@@ -34,10 +24,7 @@ function FilterSection({ title, children }) {
         className="flex w-full items-center justify-between text-xs font-black uppercase tracking-widest text-[#0b2240]"
       >
         {title}
-        <ChevronDown
-          size={14}
-          className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        />
+        <ChevronDown size={14} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
       </button>
       {open && <div className="mt-3">{children}</div>}
     </div>
@@ -45,60 +32,63 @@ function FilterSection({ title, children }) {
 }
 
 // ─── Main page ────────────────────────────────────────────────────────────────
-export default function ShopPage() {
+export default function ShopPage({ initialDepartment = "All" }) {
+  const [activeDept,     setActiveDept]     = useState(initialDepartment);
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeSizes,    setActiveSizes]    = useState([]);
   const [priceMax,       setPriceMax]       = useState(200);
   const [sortBy,         setSortBy]         = useState("featured");
   const [sidebarOpen,    setSidebarOpen]    = useState(false);
-  const [cartItems,      setCartItems]      = useState([]);
 
-  // Toggle size selection
   const toggleSize = (s) =>
-    setActiveSizes((prev) =>
-      prev.includes(s) ? prev.filter((x) => x !== s) : [...prev, s]
-    );
+    setActiveSizes((p) => p.includes(s) ? p.filter((x) => x !== s) : [...p, s]);
 
-  // Filtered + sorted products
   const displayed = useMemo(() => {
     let list = [...PRODUCTS].filter((p) => p.price <= priceMax);
-    if (activeSizes.length)
-      list = list.filter((p) => activeSizes.some((s) => p.sizes.includes(s)));
-    if (sortBy === "price_asc")  list.sort((a, b) => a.price - b.price);
-    if (sortBy === "price_desc") list.sort((a, b) => b.price - a.price);
+    if (activeDept     !== "All") list = list.filter((p) => p.department === activeDept);
+    if (activeCategory !== "All") list = list.filter((p) => p.category   === activeCategory);
+    if (activeSizes.length)       list = list.filter((p) => activeSizes.some((s) => p.sizes.includes(s)));
+    if (sortBy === "price_asc")   list.sort((a, b) => a.price - b.price);
+    if (sortBy === "price_desc")  list.sort((a, b) => b.price - a.price);
     return list;
-  }, [activeCategory, activeSizes, priceMax, sortBy]);
-
-  const handleAddToBag = (product) => {
-    setCartItems((prev) => {
-      const existing = prev.find((i) => i.id === product.id);
-      if (existing)
-        return prev.map((i) => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
-      return [...prev, { ...product, qty: 1, size: product.sizes?.[1] || "M" }];
-    });
-  };
+  }, [activeDept, activeCategory, activeSizes, priceMax, sortBy]);
 
   const activeFiltersCount =
-    (activeCategory !== "All" ? 1 : 0) + activeSizes.length + (priceMax < 200 ? 1 : 0);
+    (activeDept !== "All" ? 1 : 0) +
+    (activeCategory !== "All" ? 1 : 0) +
+    activeSizes.length +
+    (priceMax < 200 ? 1 : 0);
 
-  // ── Sidebar panel (shared between mobile drawer and desktop column) ──────────
+  const clearAll = () => {
+    setActiveDept("All");
+    setActiveCategory("All");
+    setActiveSizes([]);
+    setPriceMax(200);
+  };
+
   const SidebarContent = () => (
     <aside className="w-full">
-      {/* Brand watermark */}
-      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-5">
-        Refine Results
-      </p>
+      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-5">Refine Results</p>
+
+      <FilterSection title="Department">
+        <div className="flex flex-col gap-2">
+          {DEPARTMENTS.map((d) => (
+            <button key={d} onClick={() => setActiveDept(d)}
+              className={`text-left text-xs font-bold uppercase tracking-wider transition-colors
+                ${activeDept === d ? "text-[#ff5700]" : "text-slate-500 hover:text-[#0b2240]"}`}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+      </FilterSection>
 
       <FilterSection title="Category">
         <div className="flex flex-col gap-2">
           {CATEGORIES.map((c) => (
-            <button
-              key={c}
-              onClick={() => setActiveCategory(c)}
-              className={`text-left text-xs font-bold uppercase tracking-wider transition-colors duration-150
-                ${activeCategory === c
-                  ? "text-[#ff5700]"
-                  : "text-slate-500 hover:text-[#0b2240]"}`}
+            <button key={c} onClick={() => setActiveCategory(c)}
+              className={`text-left text-xs font-bold uppercase tracking-wider transition-colors
+                ${activeCategory === c ? "text-[#ff5700]" : "text-slate-500 hover:text-[#0b2240]"}`}
             >
               {c}
             </button>
@@ -109,10 +99,8 @@ export default function ShopPage() {
       <FilterSection title="Size">
         <div className="flex flex-wrap gap-2">
           {SIZES.map((s) => (
-            <button
-              key={s}
-              onClick={() => toggleSize(s)}
-              className={`px-3 py-1.5 text-[10px] font-black uppercase border transition-all duration-150
+            <button key={s} onClick={() => toggleSize(s)}
+              className={`px-3 py-1.5 text-[10px] font-black uppercase border transition-all
                 ${activeSizes.includes(s)
                   ? "bg-[#0b2240] text-white border-[#0b2240]"
                   : "border-slate-300 text-slate-600 hover:border-[#0b2240]"}`}
@@ -129,32 +117,28 @@ export default function ShopPage() {
             <span>$0</span>
             <span className="text-[#ff5700] font-black">${priceMax}</span>
           </div>
-          <input
-            type="range" min={20} max={200} step={10}
-            value={priceMax}
+          <input type="range" min={20} max={200} step={10} value={priceMax}
             onChange={(e) => setPriceMax(Number(e.target.value))}
-            className="w-full accent-[#ff5700]"
-          />
+            className="w-full accent-[#ff5700]" />
         </div>
       </FilterSection>
 
-      {/* Clear all */}
       {activeFiltersCount > 0 && (
-        <button
-          onClick={() => { setActiveCategory("All"); setActiveSizes([]); setPriceMax(200); }}
-          className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#ff5700] hover:text-[#0b2240] transition-colors"
-        >
-          <X size={11} />
-          Clear all filters
+        <button onClick={clearAll}
+          className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-[#ff5700] hover:text-[#0b2240] transition-colors">
+          <X size={11} /> Clear all filters
         </button>
       )}
     </aside>
   );
 
+  // Department label for hero
+  const deptLabel = activeDept === "All" ? "The Fresh Drop" : `${activeDept}'s Drop`;
+
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ── Hero banner ─────────────────────────────────────────────────────── */}
+      {/* ── Hero banner ─────────────────────────────────────────────────── */}
       <div
         className="relative bg-[#0b2240] py-16 px-6 overflow-hidden"
         style={{
@@ -163,37 +147,41 @@ export default function ShopPage() {
           backgroundSize: "4rem 4rem",
         }}
       >
-        {/* Orange accent bar */}
         <div className="absolute left-0 top-0 h-1 w-24 bg-[#ff5700]" />
-
+        <div className="absolute right-12 top-1/2 -translate-y-1/2 w-32 h-32 border-2 border-[#ff5700] opacity-20 rotate-12 hidden md:block" />
         <div className="max-w-7xl mx-auto">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-[#3b82f6] mb-2">
             Season 2026 · Now Live
           </p>
           <h1 className="text-6xl md:text-8xl font-black uppercase leading-[0.88] tracking-tighter text-white">
-            The<br />
-            <span className="text-[#3b82f6]">Fresh</span><br />
-            Drop.
+            {deptLabel.split(" ").map((word, i) => (
+              <span key={i} className={`block ${i === 1 ? "text-[#3b82f6]" : ""}`}>{word}</span>
+            ))}
           </h1>
-          <p className="mt-5 text-slate-400 text-sm max-w-sm">
-            Curated statement pieces. No subscriptions. No filler. Just the cuts that matter.
-          </p>
         </div>
-
-        {/* Geometric accent */}
-        <div className="absolute right-12 top-1/2 -translate-y-1/2 w-32 h-32 border-2 border-[#ff5700] opacity-20 rotate-12 hidden md:block" />
-        <div className="absolute right-24 top-1/2 -translate-y-1/2 w-16 h-16 bg-[#3b82f6] opacity-10 -rotate-6 hidden md:block" />
       </div>
 
-      {/* ── Toolbar ─────────────────────────────────────────────────────────── */}
+      {/* ── Department quick-tabs ────────────────────────────────────────── */}
+      <div className="bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 flex gap-1 overflow-x-auto py-2">
+          {DEPARTMENTS.map((d) => (
+            <button key={d} onClick={() => setActiveDept(d)}
+              className={`flex-shrink-0 px-5 py-2.5 text-[10px] font-black uppercase tracking-widest border transition-all duration-200
+                ${activeDept === d
+                  ? "bg-[#0b2240] text-white border-[#0b2240]"
+                  : "border-transparent text-slate-400 hover:text-[#0b2240]"}`}
+            >
+              {d}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Toolbar ─────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-30 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between gap-4">
-
-          {/* Filter toggle (mobile) */}
-          <button
-            onClick={() => setSidebarOpen((o) => !o)}
-            className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#0b2240] lg:hidden"
-          >
+          <button onClick={() => setSidebarOpen((o) => !o)}
+            className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#0b2240] lg:hidden">
             <SlidersHorizontal size={14} />
             Filters
             {activeFiltersCount > 0 && (
@@ -202,20 +190,13 @@ export default function ShopPage() {
               </span>
             )}
           </button>
-
-          {/* Result count */}
           <span className="hidden lg:block text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            {displayed.length} results
+            {displayed.length} result{displayed.length !== 1 ? "s" : ""}
           </span>
-
-          {/* Sort select */}
           <div className="flex items-center gap-2 ml-auto">
             <ArrowUpDown size={12} className="text-slate-400" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="text-xs font-black uppercase tracking-wider text-[#0b2240] border-none outline-none bg-transparent cursor-pointer"
-            >
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}
+              className="text-xs font-black uppercase tracking-wider text-[#0b2240] border-none outline-none bg-transparent cursor-pointer">
               {SORT_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
@@ -224,7 +205,7 @@ export default function ShopPage() {
         </div>
       </div>
 
-      {/* ── Body ──────────────────────────────────────────────────────────────── */}
+      {/* ── Body ──────────────────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 py-10 flex gap-10">
 
         {/* Desktop sidebar */}
@@ -232,19 +213,14 @@ export default function ShopPage() {
           <SidebarContent />
         </div>
 
-        {/* Mobile sidebar drawer */}
+        {/* Mobile drawer */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 flex lg:hidden">
-            <div
-              className="absolute inset-0 bg-black/40"
-              onClick={() => setSidebarOpen(false)}
-            />
+            <div className="absolute inset-0 bg-black/40" onClick={() => setSidebarOpen(false)} />
             <div className="relative bg-white w-72 h-full overflow-y-auto p-6 shadow-2xl">
               <div className="flex items-center justify-between mb-6">
                 <span className="text-xs font-black uppercase tracking-widest text-[#0b2240]">Filters</span>
-                <button onClick={() => setSidebarOpen(false)}>
-                  <X size={18} className="text-[#0b2240]" />
-                </button>
+                <button onClick={() => setSidebarOpen(false)}><X size={18} className="text-[#0b2240]" /></button>
               </div>
               <SidebarContent />
             </div>
@@ -256,13 +232,17 @@ export default function ShopPage() {
           {displayed.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
               {displayed.map((p) => (
-                <ProductCard key={p.id} product={p} onAddToBag={handleAddToBag} />
+                <ProductCard key={p.id} product={p} />
               ))}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-32 text-center">
               <p className="text-5xl font-black uppercase text-slate-100 tracking-tighter">No results</p>
               <p className="text-sm text-slate-400 mt-2">Try adjusting your filters.</p>
+              <button onClick={clearAll}
+                className="mt-6 flex items-center gap-2 bg-[#ff5700] text-white text-xs font-black uppercase tracking-widest px-6 py-3 hover:bg-[#0b2240] transition-colors">
+                <X size={12} /> Clear Filters
+              </button>
             </div>
           )}
         </div>
