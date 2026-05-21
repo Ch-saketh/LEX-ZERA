@@ -1,3 +1,4 @@
+// src/components/AuthModal.jsx
 import { useState } from "react";
 import { X } from "lucide-react";
 
@@ -17,8 +18,9 @@ export default function AuthModal({ open, onClose }) {
           <X size={20} />
         </button>
 
+        {/* Rebranded title nodes below */}
         <p className="mb-3 text-[10px] font-black uppercase tracking-[0.32em] text-[#ff5700]">
-          DropShift Account
+          LuxZera Account
         </p>
         <h2 className="text-4xl font-black uppercase leading-[0.9] tracking-tight text-[#0b2240]">
           {mode === "signup" ? "Join The Drop." : "Welcome Back."}

@@ -128,7 +128,7 @@ export default function CartPage({ onCheckout }) {
             >
               <div className="w-20 h-24 md:w-24 md:h-28 overflow-hidden bg-slate-50 flex-shrink-0">
                 <img
-                  src={item.image}
+                  src={item.images?.[0] || item.image}
                   alt={item.name}
                   className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-500"
                 />

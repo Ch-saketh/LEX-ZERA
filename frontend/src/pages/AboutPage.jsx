@@ -25,7 +25,7 @@ export default function AboutPage({ onShopNow }) {
   return (
     <div className="min-h-screen bg-white">
 
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      {/* ── Hero ── */}
       <div
         className="relative bg-[#0b2240] py-24 px-6 overflow-hidden"
         style={{
@@ -47,14 +47,15 @@ export default function AboutPage({ onShopNow }) {
             <span className="text-[#3b82f6]">Different.</span><br />
             Always.
           </h1>
+          {/* Rebranded brand line below */}
           <p className="mt-8 text-slate-400 text-sm leading-relaxed max-w-lg">
-            DropShift started as a rejection of everything wrong with fashion retail —
+            LuxZera started as a rejection of everything wrong with fashion retail —
             the markups, the contracts, the bloated agencies. We built the antidote.
           </p>
         </div>
       </div>
 
-      {/* ── Stats bar ────────────────────────────────────────────────────── */}
+      {/* ── Stats bar ── */}
       <div className="bg-[#ff5700]">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4">
           {STATS.map(({ value, label }) => (
@@ -66,7 +67,7 @@ export default function AboutPage({ onShopNow }) {
         </div>
       </div>
 
-      {/* ── Story ────────────────────────────────────────────────────────── */}
+      {/* ── Story ── */}
       <section className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3b82f6] mb-3">
@@ -76,6 +77,7 @@ export default function AboutPage({ onShopNow }) {
             Tired of<br />
             <span className="text-[#ff5700]">the BS.</span>
           </h2>
+          {/* Rebranded brand lines below */}
           <div className="space-y-4 text-sm text-slate-500 leading-relaxed">
             <p>
               In 2024, our founder walked out of a meeting with a major fashion agency — they wanted a 12-month
@@ -83,7 +85,7 @@ export default function AboutPage({ onShopNow }) {
               manufacturer and placed an order the same afternoon.
             </p>
             <p>
-              DropShift was built on that principle: <span className="font-black text-[#0b2240]">move fast,
+              LuxZera was built on that principle: <span className="font-black text-[#0b2240]">move fast,
               cut the fluff, and deliver something real.</span> We source heavyweight streetwear blanks
               and limited-run capsule pieces directly from makers — no middlemen, no markups.
             </p>
@@ -99,23 +101,22 @@ export default function AboutPage({ onShopNow }) {
           <div className="absolute left-0 top-0 w-3/5 h-4/5 overflow-hidden bg-slate-100">
             <img
               src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&q=80"
-              alt="DropShift model"
+              alt="LuxZera model"
               className="w-full h-full object-cover object-top grayscale"
             />
           </div>
           <div className="absolute right-0 bottom-0 w-2/5 h-3/5 overflow-hidden bg-slate-50 border-4 border-white">
             <img
               src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80"
-              alt="DropShift product"
+              alt="LuxZera product"
               className="w-full h-full object-cover object-top grayscale"
             />
           </div>
-          {/* Orange accent square */}
           <div className="absolute right-[38%] top-8 w-12 h-12 bg-[#ff5700] z-10" />
         </div>
       </section>
 
-      {/* ── Values ───────────────────────────────────────────────────────── */}
+      {/* ── Values ── */}
       <section className="bg-slate-50 py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3b82f6] mb-3">
@@ -140,7 +141,7 @@ export default function AboutPage({ onShopNow }) {
         </div>
       </section>
 
-      {/* ── Team ─────────────────────────────────────────────────────────── */}
+      {/* ── Team ── */}
       <section className="max-w-7xl mx-auto px-6 py-24">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3b82f6] mb-3">The People</p>
         <h2 className="text-5xl font-black uppercase leading-[0.9] tracking-tighter text-[#0b2240] mb-12">
@@ -160,7 +161,7 @@ export default function AboutPage({ onShopNow }) {
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
+      {/* ── CTA ── */}
       <div
         className="bg-[#0b2240] py-20 px-6 relative overflow-hidden"
         style={{

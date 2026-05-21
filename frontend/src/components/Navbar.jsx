@@ -43,20 +43,22 @@ export default function Navbar({
     <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex min-h-20 max-w-7xl items-center justify-between gap-5 px-5 lg:px-6">
         <div className="flex min-w-0 items-center gap-5 xl:gap-8">
+          
+          {/* ─── LUXZERA LOGO CONTAINER (MAXIMUM CLEAR VIEWSCALE) ─── */}
           <button
             onClick={onLogoClick}
-            className="group flex shrink-0 flex-col leading-none text-left"
-            aria-label="Go to DropShift home"
+            className="group flex shrink-0 flex-col items-start justify-center transition-transform active:scale-[0.98]"
+            aria-label="Go to LuxZera home"
           >
-            <span className="text-2xl font-black tracking-tight text-[#ff5700] transition-colors duration-300 ease-in-out group-hover:text-[#e04e00]">
-              Drop
-              <span className="text-[#0b2240] transition-colors duration-300 ease-in-out group-hover:text-[#ff5700]">
-                Shift
-              </span>
-            </span>
-            <span className="text-[9px] font-bold uppercase tracking-[0.34em] text-slate-400">
-              Fashion Drop
-            </span>
+            {/* Height frame increased to h-[64px] to allow a massive, un-squeezed logo image bounding box */}
+            <div className="h-[64px] flex items-center justify-start">
+              {/* Logo height pushed up to h-[52px] for bold visibility, matching premium fashion storefront weight layouts */}
+              <img 
+                src="/LuxZera.png" 
+                alt="LuxZera Logo" 
+                className="h-[52px] w-auto object-contain select-none group-hover:opacity-80 transition-opacity duration-200"
+              />
+            </div>
           </button>
 
           <nav className="hidden items-center gap-2 lg:flex" aria-label="Departments">

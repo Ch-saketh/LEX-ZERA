@@ -58,8 +58,9 @@ export default function Hero({ onShopNow }) {
             <span className="block">PURE DRIP.</span>
           </h1>
 
+          {/* Rebranded brand layout copy below */}
           <p className="mt-5 max-w-xl text-sm leading-6 text-slate-500">
-            Skip the mall markups and cheap fast-fashion blanks. DropShift delivers ultra-heavyweight
+            Skip the mall markups and cheap fast-fashion blanks. LuxZera delivers ultra-heavyweight
             streetwear essentials and exclusive limited-run capsule drops built to disrupt your daily rotation.
           </p>
 
@@ -82,7 +83,7 @@ export default function Hero({ onShopNow }) {
             <div className="relative aspect-[3/4] overflow-hidden rounded-b-[12rem] bg-slate-100">
               <img
                 src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&q=85"
-                alt="DropShift streetwear model wearing a premium capsule fit"
+                alt="LuxZera streetwear model wearing a premium capsule fit"
                 className="h-full w-full object-cover object-top grayscale transition-all duration-300 ease-in-out hover:grayscale-0"
                 loading="eager"
                 fetchPriority="high"

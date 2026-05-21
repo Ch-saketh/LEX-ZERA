@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const CartContext = createContext(null);
-const STORAGE_KEY = "dropshift-cart-items";
-
+// src/CartContext.jsx lines 5 & 25
+const STORAGE_KEY = "luxzera-cart-items"; // Rebranded storage keys to prevent system state collision
 function readStoredCart() {
   if (typeof window === "undefined") {
     return [];

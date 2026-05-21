@@ -1,74 +1,62 @@
-// src/components/ReviewForm.jsx
-
-import { useState } from "react";
-
-export default function ReviewForm({ onAddReview }) {
-
-  const [name, setName] = useState("");
-  const [review, setReview] = useState("");
-  const [rating, setRating] = useState(5);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!name || !review) return;
-
-    onAddReview({
-      name,
-      review,
-      rating,
-    });
-
-    setName("");
-    setReview("");
-    setRating(5);
-  };
+// src/components/ProductReviews.jsx
+export default function ProductReviews({ reviews = [] }) {
+  if (reviews.length === 0) {
+    return (
+      <div className="p-10 text-center text-xs font-bold uppercase tracking-widest text-slate-400 border border-dashed border-slate-200 rounded-2xl">
+        No feedback records copped yet.
+      </div>
+    );
+  }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="border border-slate-200 p-6 flex flex-col gap-4"
-    >
+    <div className="space-y-4 w-full">
+      {reviews.map((r, index) => (
+        <div key={index} className="border border-slate-100 p-6 bg-white rounded-2xl shadow-sm hover:border-slate-200 transition-colors">
+          
+          {/* Top Meta Data Bar Row */}
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="font-black uppercase text-xs tracking-wider text-[#0b2240]">
+                {r.name}
+              </p>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                Verified Capsule Buyer
+              </p>
+            </div>
+            <div className="text-[#ff5700] text-xs tracking-tighter select-none bg-slate-50 px-2 py-1 rounded-full border border-slate-100 font-bold">
+              {"★".repeat(r.rating)}
+            </div>
+          </div>
 
-      <h3 className="text-xl font-black uppercase text-[#0b2240]">
-        Add Review
-      </h3>
+          {/* Core Content Box Field */}
+          <p className="text-slate-600 text-sm leading-relaxed font-medium">
+            {r.review}
+          </p>
 
-      <input
-        type="text"
-        placeholder="Your Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        className="border border-slate-200 px-4 py-3 outline-none"
-      />
+          {/* SPACE OPTIMIZED USER IMAGE FRAME */}
+          {r.image && (
+            <div className="mt-4 max-w-xl max-h-72 aspect-video overflow-hidden bg-slate-50 border border-slate-100 rounded-xl">
+              <img
+                src={r.image}
+                alt="User submission review asset"
+                className="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-500"
+                loading="lazy"
+              />
+            </div>
+          )}
 
-      <select
-        value={rating}
-        onChange={(e) => setRating(Number(e.target.value))}
-        className="border border-slate-200 px-4 py-3 outline-none"
-      >
-        <option value={5}>5 Stars</option>
-        <option value={4}>4 Stars</option>
-        <option value={3}>3 Stars</option>
-        <option value={2}>2 Stars</option>
-        <option value={1}>1 Star</option>
-      </select>
-
-      <textarea
-        rows="5"
-        placeholder="Write your review..."
-        value={review}
-        onChange={(e) => setReview(e.target.value)}
-        className="border border-slate-200 px-4 py-3 outline-none resize-none"
-      />
-
-      <button
-        type="submit"
-        className="bg-[#ff5700] text-white py-4 font-black uppercase tracking-widest hover:bg-[#0b2240] transition-colors"
-      >
-        Submit Review
-      </button>
-
-    </form>
+          {/* SPACE OPTIMIZED USER VIDEO FRAME */}
+          {r.video && (
+            <div className="mt-4 max-w-xl max-h-72 aspect-video overflow-hidden bg-slate-50 border border-slate-100 rounded-xl">
+              <video controls className="w-full h-full object-cover">
+                <source src={r.video} type="video/mp4" />
+                Your browser does not support integrated streaming playback.
+              </video>
+            </div>
+          )}
+          
+        </div>
+      ))}
+    </div>
   );
 }

@@ -45,7 +45,7 @@ export default function ProductCard({ product, onViewProduct }) {
       {/* ── Image container ── */}
       <div className="relative aspect-[3/4] overflow-hidden bg-slate-50">
         <img
-          src={product.image}
+          src={product.images?.[0] || product.image}
           alt={product.name}
           className="w-full h-full object-cover object-top transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-105"
           loading="lazy"
