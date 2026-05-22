@@ -1,28 +1,16 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { CartProvider } from "./context/CartContext";
-import './index.css'
-import App from './App.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
+import { CartProvider } from './context/CartContext.jsx';
+import './index.css';
 
-// ─── DESKTOP RESOLUTION HOOK FOR THE PUBLIC FOLDER ICON ───
-const injectTabIcon = () => {
-  let link = document.querySelector("link[rel~='icon']");
-  if (!link) {
-    link = document.createElement('link');
-    document.head.appendChild(link);
-  }
-  link.type = 'image/svg+xml';
-  link.rel = 'icon';
-  // window.location.origin forces the absolute root path (http://localhost:5173/favicon.svg)
-  link.href = `${window.location.origin}/favicon.svg`;
-};
-injectTabIcon();
-// ─────────────────────────────────────────────────────────
-
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <CartProvider>
-      <App />
-    </CartProvider>
-  </StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <CartProvider>
+        <App />
+      </CartProvider>
+    </BrowserRouter>
+  </React.StrictMode>
 );
