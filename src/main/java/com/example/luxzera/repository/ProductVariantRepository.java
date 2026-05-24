@@ -1,5 +1,5 @@
 package com.example.luxzera.repository;
-
+import com.example.luxzera.model.ProductVariant;
 import com.example.luxzera.model.ProductVariant;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;

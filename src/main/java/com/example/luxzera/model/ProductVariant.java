@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
+import com.example.luxzera.model.ProductVariant;
 import java.util.UUID;
-
+@Entity
 @Table(name = "product_variants", indexes = {
         @Index(name = "idx_variants_sku", columnList = "sku", unique = true)
 })
