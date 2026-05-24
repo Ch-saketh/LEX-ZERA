@@ -1,0 +1,31 @@
+/* src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Plus+Jakarta+Sans:ital,wght@1,800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Rest of your custom CSS classes below */
+.font-logo-lux {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.font-logo-zera {
+  font-family: 'Fredoka', sans-serif;
+}
+/* src/index.css */
+.text-brutal-huge {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  letter-spacing: -0.05em;
+  line-height: 0.8;
+}
+
+.text-mask-brand-asset {
+  /* Using your exact font file structure layout as the text boundary clip mask */
+  background-image: url('/LuxZera.jpg'); 
+  background-size: cover;
+  background-position: center;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Soft fallback opacity layer to mimic the raw visual depth */
+  opacity: 0.95;
+}
